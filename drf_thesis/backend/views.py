@@ -19,3 +19,12 @@ class ProductView(APIView):
         queryset = Product.objects.all().select_related('shop')
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        request.data
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            product = serializer.save()
+            return Response(ProductSerializer(product).data)
+        else:
+            return Response(serializer.errors)
